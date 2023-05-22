@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+        }
+    .parent{
+        width: 100vw;
+    height: 96vh;
+    position: relative;
+    overflow: hidden;
+    scroll-behavior: smooth;
+}
+.wrapper{
+    height: 80vh;
+    margin-top: 10vh;
+    white-space: nowrap;
+    display: inline-block;
+    overflow: hidden;
+    width: 100vw;
+    scroll-behavior: smooth;
+    font-size: 0; /* this is because the childern is inline-block and this styles
+    will make them respect the spaces in the html file 
+    you can edit it from html file or just add font-size 0 */
+}
+.wrapper div{
+    color: green;
+    font-size: 40px;
+    font-family: cursive;
+    text-align: center;
+    height: 100%;
+    height: 100%;
+    display: inline-block;
+    width: 100vw;
+    background: pink;
+}
+.wrapper div:last-of-type{
+    background-color: #ccc;
+}
+.wrapper div:nth-child(2){
+    background-color: aliceblue;
+}
+.btns{
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    display: flex;
+    justify-content: space-evenly;
+}
+.btns button{
+    cursor: pointer;
+    width: 150px;
+}
+.color{
+    position: absolute;
+    width: 100%;
+    height: 60px;
+    background-color: #e9e9e9;
+    top: 0;
+}
+    </style>
+</head>
+<body>
+    <div class="parent">
+        <div class="wrapper">
+            <div class="justforprova">Porva</div>
+            <div>Fisrt One</div>
+            <div>Second One</div>
+            <div>Third One</div>
+        </div>
+        <div class="btns">
+            <button class="next">Next</button>
+            <button class="prev">Previous</button>
+        </div>
+        <div class="color">
+
+        </div>
+    </div>
+    <script>
+
+       
+        const wrapper = document.querySelector(".wrapper")
+        let widthS = document.querySelector(".wrapper div").getBoundingClientRect().width
+        const btns = document.querySelectorAll(".btns button")
+        const sliderCount = 4;
+        const colors = ["pink","aliceblue", "pink","#ccc"]
+        const divToBeColored = document.querySelector(".color")
+        const next_f = function (){
+            if (i == 0 ){return}
+                    wrapper.scrollLeft = i * widthS
+                    divToBeColored.style.backgroundColor = colors[i]
+        }
+        const prev_f  = function (){
+            if (i == 1){return}
+                    i == 0 ? i = sliderCount-2 : i-=2;
+                    wrapper.scrollLeft = i*widthS
+                    divToBeColored.style.backgroundColor = colors[i]
+        }
+        let i = 0; // sliderNumber -1 to make scroll correctly
+
+         // make slider auto
+        const auto_slider = function (){
+                wrapper.scrollLeft = (widthS * i)
+                divToBeColored.style.backgroundColor = colors[i]
+                i == 3 ? i =0 : i++
+                setTimeout(auto_slider , 3000)
+        }
+        auto_slider()
+        
+        // next and prev
+        btns.forEach((btn)=>{
+            btn.addEventListener("click",()=>{
+                if (btn.classList.contains("next")){
+                    next_f()
+                }
+                else{
+                    prev_f()
+                }
+            })
+        })
+
+
+        // touch
+        let t_start = false ; prev_x = 0
+        const touch_start = function (e){
+                t_start = true;
+                prev_x = e.touches[0].pageX
+                
+        }
+
+        const touch_move = function (e){
+            if (!t_start){return}
+            let current_x = e.touches[0].pageX;
+
+            if (prev_x > current_x){
+                    next_f()
+            }
+            else{
+                if (i == 1){return}
+                   prev_f()
+            }
+        }
+
+        const touch_end = function (){
+            t_start = false;
+        }
+
+
+        // on resizing the window
+        window.onresize = function (){
+            wrapper.scrollLeft = 0
+            i =0 
+            divToBeColored.style.backgroundColor = colors[i]
+            widthS = wrapper.querySelector("div").getBoundingClientRect().width
+        }
+        wrapper.addEventListener("touchstart",touch_start)
+        wrapper.addEventListener("touchmove",touch_move)
+        wrapper.addEventListener("tocuhend",touch_end)
+    </script>
+</body>
+</html>
