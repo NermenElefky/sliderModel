@@ -93,14 +93,17 @@
         const divToBeColored = document.querySelector(".color")
         const next_f = function (){
             if (i == 0 ){return}
-                    wrapper.scrollLeft = i * widthS
+                    console.log("i in next is " + i)
+                    wrapper.scrollLeft = (i * widthS)
                     divToBeColored.style.backgroundColor = colors[i]
+                    i++;
         }
         const prev_f  = function (){
             if (i == 1){return}
                     i == 0 ? i = sliderCount-2 : i-=2;
-                    wrapper.scrollLeft = i*widthS
+                    wrapper.scrollLeft = (i*widthS)
                     divToBeColored.style.backgroundColor = colors[i]
+                    i++
         }
         let i = 0; // sliderNumber -1 to make scroll correctly
 
@@ -109,7 +112,8 @@
                 wrapper.scrollLeft = (widthS * i)
                 divToBeColored.style.backgroundColor = colors[i]
                 i == 3 ? i =0 : i++
-                setTimeout(auto_slider , 3000)
+                console.log(i)
+                setTimeout(auto_slider , 5000)
         }
         auto_slider()
         
